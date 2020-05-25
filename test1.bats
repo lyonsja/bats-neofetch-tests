@@ -1,5 +1,8 @@
 #!/usr/bin/env bats
 
+# Run with: bats test1.bats
+# bats-core needs to be installed for this to work.
+
 # Change these configurations to match your hardware
 EXPECTED_CPU_MANUFACTURER="AMD"
 EXPECTED_GPU_MANUFACTURER="NVIDIA"
@@ -114,16 +117,5 @@ testIncludeDisk() {
 }
 
 
-
-# These are found around line 4677 in neofetch
-# Still need to work on output checking/display
-# Or copy over some of the code and test that in isolation
-
-# Show memory pecentage in output.
-#
-# Default: 'off'
-# Values:  'on', 'off'
-# Flag:    --memory_percent
-
-
-# Run with: bats test1.bats
+# The relevant flag information is found
+# around line 4677 in neofetch
