@@ -1,0 +1,18 @@
+jlyons@mango-box
+----------------
+OS: Manjaro Linux x86_64
+Host: MS-7C02 1.0
+Kernel: 5.6.12-1-MANJARO
+Uptime: 39 mins
+Packages: 1311 (pacman), 5 (snap)
+Shell: bash 5.0.16
+Resolution: 1920x1080, 1920x1080
+DE: Plasma
+WM: KWin
+Theme: Breath2 [Plasma], Breath [GTK2/3]
+Icons: breath2 [Plasma], breath2 [GTK2/3]
+Terminal: konsole
+Terminal Font: Noto Mono 10
+CPU: AMD Ryzen 5 3600 (12) @ 3.600GHz
+GPU: NVIDIA GeForce GTX 1660 SUPER
+Memory: 1727MiB / 16025MiB 

@@ -1,13 +1,58 @@
 #!/usr/bin/env bats
 
+# Change these configurations to match your hardware
+EXPECTED_CPU_MANUFACTURER="AMD"
+EXPECTED_GPU_MANUFACTURER="NVIDIA"
+
+
+EXPECTED_CPU_TEMPERATURE_UNIT="°C"
+
 main() {
 	bash "${BATS_TEST_DIRNAME}"/neofetch --stdout
 }
 
+testCpuTempUnitsC() {
+	bash "${BATS_TEST_DIRNAME}"/neofetch --stdout --cpu_temp C
+}
 
-@test 'example test for neofetch' {
+
+# Test that the correct CPU brand is displayed by default
+@test 'Test CPU brand' {
 	run main
-	echo "# ${lines[14]}" >&3
+
+	lineToTest=${lines[14]}
+	echo $lineToTest >&3
+	# Check if the manufacturer name appears in the CPU line from the output
+	if [[ $lineToTest == *"${EXPECTED_CPU_MANUFACTURER}"* ]]; then
+		echo "${lineToTest}" >&3
+		echo "# CPU brand correctly displayed" >&3
+	fi
+	echo "${lineToTest}" >&3
+	[ "${status}" -eq 0 ]
+}
+
+# Test that the correct GPU brand is displayed by default
+@test 'Test GPU brand' {
+	run main
+
+	lineToTest=${lines[15]}
+	# Check if the manufacturer name appears in the GPU line from the output
+	if [[ $lineToTest == *"${EXPECTED_GPU_MANUFACTURER}"* ]]; then
+		echo "# GPU brand correctly displayed" >&3
+	fi
+	[ "${status}" -eq 0 ]
+}
+
+# Test the cpu_temp flag and
+@test 'Test CPU temp units' {
+	run testCpuTempUnitsC
+
+	lineToTest=${lines[14]}
+	# Check if the correct temperature units name appear in the
+	if [[ $lineToTest == *"${EXPECTED_CPU_TEMPERATURE_UNIT}"* ]]; then
+		echo "# ${lineToTest}" >&3
+		echo "#  CPU Temp displayed with correct units" >&3
+	fi
 	[ "${status}" -eq 0 ]
 }
 
@@ -19,3 +64,12 @@ main() {
 # These are found around line 4677 in neofetch
 # Still need to work on output checking/display
 # Or copy over some of the code and test that in isolation
+
+# Show memory pecentage in output.
+#
+# Default: 'off'
+# Values:  'on', 'off'
+# Flag:    --memory_percent
+
+
+# Run with: bats test1.bats
