@@ -60,6 +60,8 @@ testIncludeDisk() {
 # Test the cpu_temp flag for linux only
 @test 'CPU should be displaying with correct temp units' {
 	run testCpuTempUnitsC
+
+	lineToTest=${lines[14]}
 	if [$EXPECTED_OS != "LINUX"]; then
 		skip "# Skipping cpu temp test for non-linux OS."
 	fi
