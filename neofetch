@@ -898,7 +898,7 @@ background_color=
 # Useful for piping into another command.
 # Default: 'off'
 # Values: 'on', 'off'
-stdout="off"
+stdout="on"
 EOF
 
 # DETECT INFORMATION
