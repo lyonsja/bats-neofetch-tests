@@ -3,11 +3,12 @@
 # Change these configurations to match your hardware
 EXPECTED_CPU_MANUFACTURER="AMD"
 EXPECTED_GPU_MANUFACTURER="NVIDIA"
-EXPECTED_OS="WINDOWS"
+EXPECTED_OS="LINUX"
 
 EXPECTED_CPU_TEMPERATURE_UNIT="°C"
 # Valid values are: C, F, off
 CPU_TEMPERATURE_FLAG="C"
+EXPECTED_DISK_PATH="/deb/sdb2"
 
 main() {
 	bash "${BATS_TEST_DIRNAME}"/neofetch --stdout
@@ -25,9 +26,13 @@ testCpuManfOff() {
 	bash "${BATS_TEST_DIRNAME}"/neofetch --stdout --cpu_brand off
 }
 
+testIncludeDisk() {
+	bash "${BATS_TEST_DIRNAME}"/neofetch --stdout --disk_show $EXPECTED_DISK_PATH
+}
+
 
 # Test that the correct CPU brand is displayed by default
-@test 'Test CPU brand' {
+@test 'CPU brand correctly displayed' {
 	run main
 
 	lineToTest=${lines[14]}
@@ -40,7 +45,7 @@ testCpuManfOff() {
 }
 
 # Test that the correct GPU brand is displayed by default
-@test 'Test GPU brand' {
+@test 'GPU brand correctly displayed' {
 	run main
 
 	lineToTest=${lines[15]}
@@ -53,7 +58,7 @@ testCpuManfOff() {
 }
 
 # Test the cpu_temp flag for linux only
-@test 'Test CPU temp units' {
+@test 'CPU should be displaying with correct temp units' {
 	run testCpuTempUnitsC
 	if [$EXPECTED_OS != "LINUX"]; then
 		skip "# Skipping cpu temp test for non-linux OS."
@@ -67,7 +72,7 @@ testCpuManfOff() {
 }
 
 # Test disabling the cpu manufacturer
-@test 'Test CPU brand off' {
+@test 'CPU brand should be left off' {
 	run testCpuManfOff
 
 	lineToTest=${lines[14]}
@@ -80,10 +85,10 @@ testCpuManfOff() {
 }
 
 # Test disabling the gpu manufacturer
-@test 'Test GPU brand off' {
+@test 'GPU brand should be off' {
 	run testGpuManufOff
 
-	lineToTest=${lines[14]}
+	lineToTest=${lines[15]}
 	# Check if the manufacturer name appears in the CPU line from the output
 	if [[ $lineToTest != *"${EXPECTED_GPU_MANUFACTURER}"* ]]; then
 		echo "# ${lineToTest}" >&3
@@ -92,11 +97,22 @@ testCpuManfOff() {
 	[ "${status}" -eq 0 ]
 }
 
-#--disk_percent on/off       Hide/Show disk percent.
-# Possible commands to test passing to Neofetch
-# --cpu_brand on/off
-# --cpu_temp C/F/off
-# --gpu_brand on/off
+# Test showing the disk line in the output
+@test 'Specified disk should be included in the output' {
+	run testIncludeDisk
+
+	lineToTest=${lines[16]}
+	# Check if the manufacturer name appears in the CPU line from the output
+	if [[ $lineToTest == *"%"* ]]; then
+		echo "# ${lineToTest}" >&3
+		echo "# Disk correctly shown" >&3
+		[ "${status}" -eq 0 ]
+	fi
+	[ "${status}" -eq 1 ]
+}
+
+
+
 # These are found around line 4677 in neofetch
 # Still need to work on output checking/display
 # Or copy over some of the code and test that in isolation

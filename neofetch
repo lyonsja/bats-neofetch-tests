@@ -719,7 +719,7 @@ bar_color_total="distro"
 cpu_display="off"
 memory_display="off"
 battery_display="off"
-disk_display="off"
+disk_display="on"
 
 
 # Backend Settings
