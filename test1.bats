@@ -3,7 +3,7 @@
 # Change these configurations to match your hardware
 EXPECTED_CPU_MANUFACTURER="AMD"
 EXPECTED_GPU_MANUFACTURER="NVIDIA"
-
+EXPECTED_OS="LINUX"
 
 EXPECTED_CPU_TEMPERATURE_UNIT="°C"
 
@@ -21,13 +21,11 @@ testCpuTempUnitsC() {
 	run main
 
 	lineToTest=${lines[14]}
-	echo $lineToTest >&3
 	# Check if the manufacturer name appears in the CPU line from the output
 	if [[ $lineToTest == *"${EXPECTED_CPU_MANUFACTURER}"* ]]; then
 		echo "${lineToTest}" >&3
 		echo "# CPU brand correctly displayed" >&3
 	fi
-	echo "${lineToTest}" >&3
 	[ "${status}" -eq 0 ]
 }
 
@@ -43,10 +41,13 @@ testCpuTempUnitsC() {
 	[ "${status}" -eq 0 ]
 }
 
-# Test the cpu_temp flag and
+# Test the cpu_temp flag for linux only
 @test 'Test CPU temp units' {
 	run testCpuTempUnitsC
-
+	if [[$EXPECTED_OS != "LINUX"]]; then
+		echo "# Skipping cpu temp test for non-linux OS."
+		skip
+	fi
 	lineToTest=${lines[14]}
 	# Check if the correct temperature units name appear in the
 	if [[ $lineToTest == *"${EXPECTED_CPU_TEMPERATURE_UNIT}"* ]]; then
